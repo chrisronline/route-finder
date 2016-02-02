@@ -1,12 +1,7 @@
 import { getReposAsync, repoMethodGenerator } from '../../utility/github'
-import extract, { parseRoutePrefixesFromRouteConfig } from '../../utility/extract'
-
-const routeConfigPathRegExp = /.*\RouteConfig.cs/
-const controllersPathRegExp = /.*\/Controllers\/.*.cs/
-const repoWhitelist = [
-  'hudl-profiles',
-  // 'hudl-kickoff'
-]
+import { loadRoutesFromCache, saveRoutesToCache } from './helpers/cache'
+import getAllMappedRouteFileContents from './helpers/mappedRoutes'
+import getRoutesFromController from './helpers/routesFromController'
 
 export const ROUTES_LOADED = 'ROUTES_LOADED'
 export function routesLoaded(routes) {
@@ -19,45 +14,64 @@ export function fetchTree(tree) {
 }
 
 export const FETCH_CONTENT = 'FETCH_CONTENT'
-export function fetchContent(path) {
-  return { type: FETCH_CONTENT, path }
+export function fetchContent(tree, path) {
+  return { type: FETCH_CONTENT, path, tree }
 }
 
 export const LOAD_ROUTES = 'LOAD_ROUTES'
+const controllersPathRegExp = /.*\/Controllers\/.*.cs/
+const repoWhitelist = [ 'hudl' ]
 export function loadRoutes() {
-  const routes = []
   return async dispatch => {
-    const repos = await getReposAsync()
-    const hudlRepos = repos.filter(repo => repo.owner.login === 'hudl')
-      // .filter(repo => repoWhitelist.includes(repo.name))
+    const org = 'hudl'
+    
+    let routes = loadRoutesFromCache() || []
+    if (routes.length) {
+      dispatch(routesLoaded(routes))
+      return
+    }
+        
+    const repos = (await getOrgRepos(org)).filter(repo => repoWhitelist.includes(repo.name))
+    repos.sort((a, b) => {
+      if (a.name === b.name) return 0
+      return (a.name > b.name) ? 1 : -1
+    })
 
-    for (let hudlRepo of hudlRepos) {
-      const { getTreeAsync, getContentsAsync } = repoMethodGenerator('hudl', hudlRepo.name)
-      dispatch(fetchTree(hudlRepo.name))
-      const tree = await getTreeAsync('master?recursive=1')
-      const controllers = tree.filter(t => controllersPathRegExp.test(t.path))
+    for (let repo of repos) {
+      const { name: repoName } = repo
+      const { getTreeAsync, getContentsAsync } = repoMethodGenerator(org, repoName)
       
+      dispatch(fetchTree(repoName))
+      const tree = await getTreeAsync('master?recursive=1')
+      const controllers = tree.filter(t => controllersPathRegExp.test(t.path))      
       if (controllers.length === 0) {
         continue
       }
       
-      let routeConfig = tree.find(t => routeConfigPathRegExp.test(t.path))
-      if (routeConfig) {
-        let routeRawContent = await getContentsAsync('master', routeConfig.path)
-        routeConfig = parseRoutePrefixesFromRouteConfig(new Buffer(routeRawContent.content, 'base64').toString())
-      }
-            
+      const mappedRouteContents = await getAllMappedRouteFileContents(tree, getContentsAsync)       
       for (let controller of controllers) {
-        dispatch(fetchContent(controller.path))
-        const rawContent = await getContentsAsync('master', controller.path)
-        const rawFile = new Buffer(rawContent.content, 'base64').toString()
-        const controllerRoutes = extract(controller.path, rawFile, routeConfig).map(route => {
-          return Object.assign({}, route, { cluster: hudlRepo.name })
-        })
-        routes.push(...controllerRoutes)
+        // if (controller.path.indexOf('CategoryController') === -1) {
+        //   continue
+        // }
+        dispatch(fetchContent(repoName, controller.path))
+        const controllerRoutes = await getRoutesFromController(
+          controller.path, dispatch, mappedRouteContents, getContentsAsync)
+        routes.push(...controllerRoutes.map(route => Object.assign({}, route, {
+          cluster: repoName,
+          pathUrl: 'http://github.com/' + org + '/' + repoName + '/blob/master/' + route.path
+        })))
       }
     }
     
+    saveRoutesToCache(routes)
+    
+    console.log('done')
+    
     dispatch(routesLoaded(routes))
   }
+}
+
+const getOrgRepos = async (orgName) => {
+  const repos = await getReposAsync()
+  return repos.filter(repo => repo.owner.login === orgName)
 }

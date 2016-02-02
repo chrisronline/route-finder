@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import FixedDataTable, { Table, Column, Cell } from 'fixed-data-table'
+import { SortTypes } from '../sort/sort.actions'
 
 import 'fixed-data-table/dist/fixed-data-table-base.css'
 import 'fixed-data-table/dist/fixed-data-table-style.css'
@@ -12,34 +13,82 @@ const TextCell = ({rowIndex, data, col, ...props}) => {
   )
 }
 
-const RoutesComponent = ({ routes, ...props }) => (
+const LinkCell = ({rowIndex, data, colText, colHref, ...props}) => {
+  return (
+    <Cell {...props}>
+      <a href={data[rowIndex][colHref]}>
+        {data[rowIndex][colText]}
+      </a>
+    </Cell>
+  )
+}
+
+const SortHeaderCell = ({changeSort, sortDir, columnKey, children, ...props}) => {
+  return (
+    <Cell {...props}>
+      <a onClick={() => changeSort(columnKey, sortDir)}>
+        {children} {sortDir ? (sortDir === SortTypes.DESC ? '(desc)' : '(asc)') : ''}
+      </a>
+    </Cell>
+  )
+}
+
+const RoutesComponent = ({ changeSort, sortDir, routes, ...props }) => (
   <Table
     rowHeight={50}
     rowsCount={routes.length}
     headerHeight={50}
     width={1200}
-    height={300}
+    height={500}
     {...props}>
     <Column
-      header={<Cell>Type</Cell>}
+      columnKey="type"
+      header={
+        <SortHeaderCell
+          changeSort={changeSort}
+          sortDir={sortDir}>
+          Type
+        </SortHeaderCell>
+      }
       cell={<TextCell data={routes} col="type"/>}
       fixed={true}
       width={100}
     />
     <Column
-      header={<Cell>Path</Cell>}
+      columnKey="cluster"
+      header={
+        <SortHeaderCell
+          changeSort={changeSort}
+          sortDir={sortDir}>
+          Cluster
+        </SortHeaderCell>
+      }
       cell={<TextCell data={routes} col="cluster"/>}
       fixed={true}
       width={200}
     />
     <Column
-      header={<Cell>Path</Cell>}
-      cell={<TextCell data={routes} col="path"/>}
+      columnKey="path"
+      header={
+        <SortHeaderCell
+          changeSort={changeSort}
+          sortDir={sortDir}>
+          Path
+        </SortHeaderCell>
+      }
+      cell={<LinkCell data={routes} colText="path" colHref="pathUrl"/>}
       fixed={true}
       width={400}
     />
     <Column
-      header={<Cell>Route</Cell>}
+      columnKey="route"
+      header={
+        <SortHeaderCell
+          changeSort={changeSort}
+          sortDir={sortDir}>
+          Route
+        </SortHeaderCell>
+      }
       cell={<TextCell data={routes} col="route"/>}
       fixed={true}
       width={500}
@@ -48,7 +97,8 @@ const RoutesComponent = ({ routes, ...props }) => (
 )
 
 RoutesComponent.propTypes = {
-  routes: PropTypes.array.isRequired
+  routes: PropTypes.array.isRequired,
+  changeSort: PropTypes.func.isRequired
 }
 
 export default RoutesComponent
