@@ -18,6 +18,7 @@
   "homepage": "https://github.com/chrisronline/route-finder#readme",
   "dependencies": {
     "bluebird": "^3.1.1",
+    "classnames": "^2.2.3",
     "fixed-data-table": "^0.6.0",
     "github-api": "^0.11.2",
     "json-loader": "^0.5.4",
@@ -40,6 +41,7 @@
     "css-loader": "^0.23.1",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.12",
-    "webpack-notifier": "^1.2.1"
+    "webpack-notifier": "^1.2.1",
+    "webpack-stream": "^3.1.0"
   }
 }

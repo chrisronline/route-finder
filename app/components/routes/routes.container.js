@@ -10,17 +10,23 @@ import { routesSelector } from './routes.selector'
 class RoutesContainer extends Component {
   componentWillMount() {
     const { loadRoutes } = this.props
-    
+
     loadRoutes()
   }
-  
+
   render() {
-    const { routes, changeSort, sortDir, trees } = this.props
-        
+    const { routes, changeSort, sortDir, trees, reposTotal, reposCount } = this.props
+
     // `routes=null` indicates no routes have been loaded yet
     if (!routes) {
+      const reposPercent = Math.round((reposCount / reposTotal) * 100) || 0
+      const reposPercentLoaded = reposPercent + '%'
       const treeList = trees
         ? trees.map((tree, key) => {
+            const controllersPercent = tree.controllersTotal == 0
+              ? 100
+              : Math.round((tree.controllersLoaded / tree.controllersTotal) * 100) || 0
+            const controllersPercentLoaded = controllersPercent + '%'
             let files
             if (tree.files && tree.files.length) {
               const list = tree.files.map((file, key) => {
@@ -34,24 +40,25 @@ class RoutesContainer extends Component {
             }
             return (
               <li key={key}>
-                {tree.name}
+                {tree.name} ({controllersPercentLoaded})
                 {files}
               </li>
             )
-          }) 
+          })
         : null
-      
+
       return (
         <section className="home">
           <p>Loading...</p>
           <h3>Trees</h3>
+          <h4>{reposPercentLoaded}</h4>
           <ul>
             {treeList}
           </ul>
         </section>
       )
     }
-    
+
     return (
       <section className="home">
         <FilterComponent/>
