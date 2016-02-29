@@ -30,7 +30,6 @@ export function setRepoCount(count) {
 
 export const LOAD_ROUTES = 'LOAD_ROUTES'
 const controllersPathRegExp = /.*\/Controllers\/.*.cs/
-const repoWhitelist = [ 'hudl-exchanges' ]
 export function loadRoutes() {
   return async dispatch => {
     const org = 'hudl'
@@ -41,7 +40,7 @@ export function loadRoutes() {
       return
     }
 
-    const repos = (await getOrgRepos(org))//.filter(repo => repoWhitelist.includes(repo.name))
+    const repos = (await getReposAsync(org)).filter(repo => repo.name.includes('hudl'))
     repos.sort((a, b) => {
       if (a.name === b.name) return 0
       return (a.name > b.name) ? 1 : -1
@@ -65,9 +64,6 @@ export function loadRoutes() {
 
       const mappedRouteContents = await getAllMappedRouteFileContents(tree, getContentsAsync)
       for (let controller of controllers) {
-        // if (controller.path.indexOf('CategoryController') === -1) {
-        //   continue
-        // }
         dispatch(fetchContent(repoName, controller.path))
         const controllerRoutes = await getRoutesFromController(
           controller.path, dispatch, mappedRouteContents, getContentsAsync)
@@ -84,9 +80,4 @@ export function loadRoutes() {
 
     dispatch(routesLoaded(routes))
   }
-}
-
-const getOrgRepos = async (orgName) => {
-  const repos = await getReposAsync()
-  return repos.filter(repo => repo.owner.login === orgName)
 }

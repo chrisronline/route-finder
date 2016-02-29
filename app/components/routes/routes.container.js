@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { loadRoutes } from '../routes/routes.actions'
+import { loadRoutes } from './routes.actions'
 import { changeSort } from '../sort/sort.actions'
-import RoutesComponent from '../routes/routes.component'
+import RoutesComponent from './routes.component'
 import FilterComponent from '../filter'
+import RoutesLoading from './routes.loading'
 import { routesSelector } from './routes.selector'
 
 class RoutesContainer extends Component {
@@ -19,44 +20,10 @@ class RoutesContainer extends Component {
 
     // `routes=null` indicates no routes have been loaded yet
     if (!routes) {
-      const reposPercent = Math.round((reposCount / reposTotal) * 100) || 0
-      const reposPercentLoaded = reposPercent + '%'
-      const treeList = trees
-        ? trees.map((tree, key) => {
-            const controllersPercent = tree.controllersTotal == 0
-              ? 100
-              : Math.round((tree.controllersLoaded / tree.controllersTotal) * 100) || 0
-            const controllersPercentLoaded = controllersPercent + '%'
-            let files
-            if (tree.files && tree.files.length) {
-              const list = tree.files.map((file, key) => {
-                return (<li key={key}>{file}</li>)
-              })
-              files = (
-                <ul>
-                  {list}
-                </ul>
-              )
-            }
-            return (
-              <li key={key}>
-                {tree.name} ({controllersPercentLoaded})
-                {files}
-              </li>
-            )
-          })
-        : null
-
-      return (
-        <section className="home">
-          <p>Loading...</p>
-          <h3>Trees</h3>
-          <h4>{reposPercentLoaded}</h4>
-          <ul>
-            {treeList}
-          </ul>
-        </section>
-      )
+      if (trees && reposCount && reposTotal) {
+        return (<RoutesLoading trees={trees} reposCount={reposCount} reposTotal={reposTotal}/>)
+      }
+      return false
     }
 
     return (

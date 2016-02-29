@@ -5,7 +5,7 @@ const github = new GitHub({ auth: 'token', token: '' })
 const user = github.getUser()
 
 export default { github }
-export const getReposAsync = Promise.promisify(user.repos)
+export const getReposAsync = Promise.promisify(user.orgRepos)
 export const repoMethodGenerator = (owner, name) => {
   const repo = github.getRepo(owner, name)
   return {

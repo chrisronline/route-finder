@@ -5,12 +5,16 @@ import { SortTypes } from '../sort/sort.actions'
 const routeListSelector = state => state.routes
 const filterSelector = state => state.filter
 const sortSelector = state => state.sort
+const tokenSelector = state => state.token.token
+const orgSelector = state => state.orgs.org
 
 export const routesSelector = createSelector(
   routeListSelector,
   filterSelector,
   sortSelector,
-  (routesObj, filter, sort) => {
+  tokenSelector,
+  orgSelector,
+  (routesObj, filter, sort, token, org) => {
     let routes = routesObj.list
     if (routes) {
       const { query, type, cluster } = filter
@@ -54,7 +58,9 @@ export const routesSelector = createSelector(
       reposTotal: routesObj.reposTotal,
       reposCount: routesObj.reposCount,
       sortDir: sort ? sort.dir : null,
-      routes
+      routes,
+      token,
+      org
     }
   }
 )

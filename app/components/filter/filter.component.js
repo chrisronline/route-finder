@@ -20,17 +20,35 @@ const FilterComponent = ({ filter, setFilter, routes, setType, setCluster }) => 
   const uniqueTypes = [ ...new Set(types) ].map(optionsBuilder)
   const uniqueClusters = [ ...new Set(clusters) ].map(optionsBuilder)
 
+  const selectFixStyle = {'paddingRight': 31}
+
   return (
     <article>
-      <select onChange={(e) => setType(e.target.value)}>
-        <option value="">Select a type</option>
-        {uniqueTypes}
-      </select>
-      <select onChange={(e) => setCluster(e.target.value)}>
-        <option value="">Select a cluster</option>
-        {uniqueClusters}
-      </select>
-      <input type="text" value={filter} placeholder="Find in path or route" onChange={(e) => setFilter(e.target.value)}/>
+      <form className="ko-form">
+        <div className="ko-form__item ko-form--inline">
+          <div className="ko-form__input-container--select">
+            <select className="ko-form__input--select" style={selectFixStyle} onChange={(e) => setType(e.target.value)}>
+              <option value="">Select a type</option>
+              {uniqueTypes}
+            </select>
+          </div>
+        </div>
+        <div className="ko-form__item ko-form--inline">
+          <div className="ko-form__input-container--select">
+            <select className="ko-form__input--select" style={selectFixStyle} onChange={(e) => setCluster(e.target.value)}>
+              <option value="">Select a cluster</option>
+              {uniqueClusters}
+            </select>
+         </div>
+        </div>
+        <div className="ko-form__item ko-form--inline">
+          <label className="ko-form__label"></label>
+          <div className="ko-form__input-container--search">
+            <input type="search" value={filter} placeholder="Find in path or route"
+              className="ko-form__input" onChange={(e) => setFilter(e.target.value)}/>
+          </div>
+        </div>
+      </form>
     </article>
   )
 }
