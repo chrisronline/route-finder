@@ -8,8 +8,6 @@ const rootReducer = combineReducers({
   filter,
   routes,
   sort,
-  token,
-  orgs,
   form
 })
 
