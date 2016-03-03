@@ -24,8 +24,8 @@ const FilterComponent = ({ filter, setFilter, routes, setType, setCluster }) => 
 
   return (
     <article>
-      <form className="ko-form">
-        <div className="ko-form__item ko-form--inline">
+      <form className="ko-form l-form-grid--3">
+        <div className="ko-form__item l-grid__item">
           <div className="ko-form__input-container--select">
             <select className="ko-form__input--select" style={selectFixStyle} onChange={(e) => setType(e.target.value)}>
               <option value="">Select a type</option>
@@ -33,7 +33,8 @@ const FilterComponent = ({ filter, setFilter, routes, setType, setCluster }) => 
             </select>
           </div>
         </div>
-        <div className="ko-form__item ko-form--inline">
+
+        <div className="ko-form__item l-grid__item">
           <div className="ko-form__input-container--select">
             <select className="ko-form__input--select" style={selectFixStyle} onChange={(e) => setCluster(e.target.value)}>
               <option value="">Select a cluster</option>
@@ -41,8 +42,8 @@ const FilterComponent = ({ filter, setFilter, routes, setType, setCluster }) => 
             </select>
          </div>
         </div>
-        <div className="ko-form__item ko-form--inline">
-          <label className="ko-form__label"></label>
+
+        <div className="ko-form__item l-grid__item">
           <div className="ko-form__input-container--search">
             <input type="search" value={filter} placeholder="Find in path or route"
               className="ko-form__input" onChange={(e) => setFilter(e.target.value)}/>
