@@ -5,11 +5,21 @@
 //
 // --------------------------------------------
 // --------------------------------------------
-$scss-path: './node_modules/hudl-kickoff-css/static/scss';
+@import '../node_modules/hudl-kickoff-css/static/scss/functions/_all';
+@import '../node_modules/hudl-kickoff-css/static/scss/variables/_all';
+@import '../node_modules/hudl-kickoff-css/static/scss/mixins/_all';
 
-@import #{$scss-path}/functions/_all;
-@import #{$scss-path}/variables/_all;
-@import #{$scss-path}/mixins/_all;
+
+
+// --------------------------------------------
+// --------------------------------------------
+//
+// Variables
+//
+// --------------------------------------------
+// --------------------------------------------
+$content-max: 75rem;
+$content-pad: 1.25rem;
 
 
 
@@ -22,4 +32,34 @@ $scss-path: './node_modules/hudl-kickoff-css/static/scss';
 // --------------------------------------------
 // --------------------------------------------
 
-.site-header { background-color: green; }
+.site-header {
+  background-color: $ui-dark;
+  color: $ui-white;
+  text-align: center;
+  padding-top: $spacer-xxlarge;
+  padding-bottom: $spacer-large;
+}
+
+.site-logo__h {
+  font-weight: $font-weight-bold;
+  font-size: $display-size-h3;
+  color: $ui-blue-50;
+}
+
+
+.l-content {
+  padding: 0 $content-pad;
+  width: 100%;
+  max-width: $content-max;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mq($content-max) {
+    padding: 0;
+  }
+
+}
+
+
+// hack to fix issue
+.ko-form__icon--search:before { left: 0; }

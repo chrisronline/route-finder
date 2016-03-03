@@ -28,8 +28,19 @@ class RoutesContainer extends Component {
 
     return (
       <section className="home">
-        <FilterComponent/>
-        <RoutesComponent routes={routes} changeSort={changeSort} sortDir={sortDir}/>
+
+        <header className="site-header" role="header">
+          <div className="l-content">
+            <h1 className="site-logo__h">Route Finder</h1>
+            <p className="ko-text--lg ko-spacer--xsm">Find what you want you want to find it</p>
+          </div>
+          <FilterComponent/>
+        </header>
+
+
+        <div className="l-content ko-spacer--xxlg--top">
+          <RoutesComponent routes={routes} changeSort={changeSort} sortDir={sortDir}/>
+        </div>
       </section>
     )
   }

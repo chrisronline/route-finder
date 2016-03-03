@@ -4,7 +4,7 @@ import { render } from 'react-dom'
 import configureStore from './store'
 import Routes from './components/routes'
 
-import './components/app.scss';
+import './app.scss';
 
 const store = configureStore()
 

@@ -39,7 +39,7 @@ const RoutesComponent = ({ changeSort, sortDir, routes, ...props }) => (
     rowsCount={routes.length}
     headerHeight={50}
     width={1200}
-    height={500}
+    height={800}
     {...props}>
     <Column
       columnKey="type"

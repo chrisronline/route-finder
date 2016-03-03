@@ -23,12 +23,12 @@ const FilterComponent = ({ filter, setFilter, routes, setType, setCluster }) => 
   const selectFixStyle = {'paddingRight': 31}
 
   return (
-    <article>
-      <form className="ko-form l-form-grid--3">
+    <article className="l-content ko-spacer--xxlg--top">
+      <form className="ko-form ko-form--dark l-form-grid--3">
         <div className="ko-form__item l-grid__item">
           <div className="ko-form__input-container--select">
             <select className="ko-form__input--select" style={selectFixStyle} onChange={(e) => setType(e.target.value)}>
-              <option value="">Select a type</option>
+              <option value="">All Types</option>
               {uniqueTypes}
             </select>
           </div>
@@ -37,16 +37,17 @@ const FilterComponent = ({ filter, setFilter, routes, setType, setCluster }) => 
         <div className="ko-form__item l-grid__item">
           <div className="ko-form__input-container--select">
             <select className="ko-form__input--select" style={selectFixStyle} onChange={(e) => setCluster(e.target.value)}>
-              <option value="">Select a cluster</option>
+              <option value="">All Clusters</option>
               {uniqueClusters}
             </select>
          </div>
         </div>
 
         <div className="ko-form__item l-grid__item">
-          <div className="ko-form__input-container--search">
+          <div className="ko-form__input-container--has-icon">
             <input type="search" value={filter} placeholder="Find in path or route"
               className="ko-form__input" onChange={(e) => setFilter(e.target.value)}/>
+              <span className="ko-icon ko-form__icon--search"></span>
           </div>
         </div>
       </form>
