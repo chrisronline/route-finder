@@ -38,7 +38,7 @@ class RoutesContainer extends Component {
         </header>
 
 
-        <div className="l-content ko-spacer--xxlg--top">
+        <div className="l-content data-table__container">
           <RoutesComponent routes={routes} changeSort={changeSort} sortDir={sortDir}/>
         </div>
       </section>

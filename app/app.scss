@@ -18,7 +18,7 @@
 //
 // --------------------------------------------
 // --------------------------------------------
-$content-max: 75rem;
+$content-max: 68.75rem;
 $content-pad: 1.25rem;
 
 
@@ -35,15 +35,17 @@ $content-pad: 1.25rem;
 .site-header {
   background-color: $ui-dark;
   color: $ui-white;
-  text-align: center;
   padding-top: $spacer-xxlarge;
-  padding-bottom: $spacer-large;
+  padding-bottom: $spacer-xlarge;
+
+  p { text-align: center; }
 }
 
 .site-logo__h {
   font-weight: $font-weight-bold;
   font-size: $display-size-h3;
   color: $ui-blue-50;
+  text-align: center;
 }
 
 
@@ -53,6 +55,7 @@ $content-pad: 1.25rem;
   max-width: $content-max;
   margin-left: auto;
   margin-right: auto;
+  // overflow-x: scroll;
 
   @include mq($content-max) {
     padding: 0;
@@ -61,5 +64,94 @@ $content-pad: 1.25rem;
 }
 
 
+
+
+// Table
+// --------------------------------------------
+.data-table__container {
+  font-size: $body-size-small;
+  padding-bottom: $spacer-large;
+  margin-top: 4rem;
+
+  .public_fixedDataTable_header,
+  .public_fixedDataTable_header .public_fixedDataTableCell_main {
+    background-image: none;
+    background-color: $ui-dark-70;
+    border-color: $ui-dark-50;
+  }
+
+  .public_fixedDataTable_main {
+    // border-color: green;
+    border-color: $ui-gray-medium;
+  }
+
+  .public_fixedDataTableCell_main { border-color: $ui-gray-medium; }
+
+  .public_fixedDataTableRow_highlighted .public_fixedDataTableCell_main { background-color: $ui-gray-light; }
+
+  .public_fixedDataTableRow_fixedColumnsDivider {
+    border-color: transparent;
+  }
+
+  .public_fixedDataTableCell_cellContent { padding: 0 1rem; }
+
+}
+
+
+
+.data-table__filter {
+  // color: $ui-text-medium;
+  color: $ui-dark-20;
+  display: block;
+  cursor: pointer;
+
+  &:hover { text-decoration: none; }
+}
+
+.data-table__desc,
+.data-table__asc {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  margin-top: -0.25rem;
+}
+
+.data-table__desc {
+  border-top: .5rem solid $ui-dark-50;
+  border-left: .25rem solid transparent;
+  border-right: .25rem solid transparent;
+}
+
+.data-table__asc {
+  border-bottom: .5rem solid $ui-dark-50;
+  border-left: .25rem solid transparent;
+  border-right: .25rem solid transparent;
+}
+
+
+
+.data-table__link {
+  display: block;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: $ui-blue-60;
+}
+
+
+
+// Hacks + Overrides
+// --------------------------------------------
+
 // hack to fix issue
 .ko-form__icon--search:before { left: 0; }
+
+
+// .test {
+//   position: absolute;
+//   right: 0.85rem;
+//   top: 50%;
+//   margin-top: -0.25rem;
+//   border-top: .5rem solid $ui-dark-30;
+//   border-left: .25rem solid transparent;
+//   border-right: .25rem solid transparent;
+// }

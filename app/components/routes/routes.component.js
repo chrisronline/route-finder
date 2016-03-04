@@ -16,7 +16,7 @@ const TextCell = ({rowIndex, data, col, ...props}) => {
 const LinkCell = ({rowIndex, data, colText, colHref, ...props}) => {
   return (
     <Cell {...props}>
-      <a href={data[rowIndex][colHref]}>
+      <a className="data-table__link" target="_blank" href={data[rowIndex][colHref]}>
         {data[rowIndex][colText]}
       </a>
     </Cell>
@@ -26,8 +26,8 @@ const LinkCell = ({rowIndex, data, colText, colHref, ...props}) => {
 const SortHeaderCell = ({changeSort, sortDir, columnKey, children, ...props}) => {
   return (
     <Cell {...props}>
-      <a onClick={() => changeSort(columnKey, sortDir)}>
-        {children} {sortDir ? (sortDir === SortTypes.DESC ? '(desc)' : '(asc)') : ''}
+      <a className="data-table__filter" onClick={() => changeSort(columnKey, sortDir)}>
+        {children} {sortDir ? (sortDir === SortTypes.DESC ? <span className="data-table__desc"></span> : <span className="data-table__asc"></span>) : ''}
       </a>
     </Cell>
   )
@@ -38,22 +38,10 @@ const RoutesComponent = ({ changeSort, sortDir, routes, ...props }) => (
     rowHeight={50}
     rowsCount={routes.length}
     headerHeight={50}
-    width={1200}
-    height={800}
+    width={1100}
+    maxHeight={600}
     {...props}>
-    <Column
-      columnKey="type"
-      header={
-        <SortHeaderCell
-          changeSort={changeSort}
-          sortDir={sortDir}>
-          Type
-        </SortHeaderCell>
-      }
-      cell={<TextCell data={routes} col="type"/>}
-      fixed={true}
-      width={100}
-    />
+
     <Column
       columnKey="cluster"
       header={
@@ -68,6 +56,19 @@ const RoutesComponent = ({ changeSort, sortDir, routes, ...props }) => (
       width={200}
     />
     <Column
+      columnKey="type"
+      header={
+        <SortHeaderCell
+          changeSort={changeSort}
+          sortDir={sortDir}>
+          Type
+        </SortHeaderCell>
+      }
+      cell={<TextCell data={routes} col="type"/>}
+      // fixed={true}
+      width={100}
+    />
+    <Column
       columnKey="path"
       header={
         <SortHeaderCell
@@ -77,8 +78,9 @@ const RoutesComponent = ({ changeSort, sortDir, routes, ...props }) => (
         </SortHeaderCell>
       }
       cell={<LinkCell data={routes} colText="path" colHref="pathUrl"/>}
-      fixed={true}
-      width={400}
+      // fixed={true}
+      flexGrow={1}
+      width={300}
     />
     <Column
       columnKey="route"
@@ -90,8 +92,9 @@ const RoutesComponent = ({ changeSort, sortDir, routes, ...props }) => (
         </SortHeaderCell>
       }
       cell={<TextCell data={routes} col="route"/>}
-      fixed={true}
-      width={500}
+      // fixed={true}
+      flexGrow={2}
+      width={200}
     />
   </Table>
 )
